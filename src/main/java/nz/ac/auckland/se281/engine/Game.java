@@ -16,17 +16,18 @@ public class Game {
     String namePlayer = options[0];
     MessageCli.WELCOME_PLAYER.printMessage(namePlayer);
     this.totalRounds = numRounds;
-    this.currentRound = 0;
+    this.currentRound = 1;
 
   }
 
   public void play() {
-    if (currentRound < totalRounds) {
-      currentRound++;
-      MessageCli.START_ROUND.printMessage(currentRound, totalRounds);
-    } else {
+    if (currentRound > totalRounds) {
       MessageCli.PRINT_END_GAME.printMessage();
     }
+    MessageCli.START_ROUND.printMessage(currentRound, totalRounds);
+    currentRound++;
+
+    MessageCli.ASK_HUMAN_INPUT.printMessage();
 
   }
 
