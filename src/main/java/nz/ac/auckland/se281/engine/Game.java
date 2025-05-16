@@ -28,7 +28,7 @@ public class Game {
       MessageCli.PRINT_END_GAME.printMessage();
     }
     MessageCli.START_ROUND.printMessage(currentRound, totalRounds);
-    currentRound++;
+
 
     MessageCli.ASK_HUMAN_INPUT.printMessage();
     String[] parts = Utils.scanner.nextLine().trim().split("\\s+");
@@ -39,13 +39,20 @@ public class Game {
       MessageCli.INVALID_HUMAN_INPUT.printMessage();
     parts = Utils.scanner.nextLine().trim().split("\\s+");
     }
+    if (currentRound % 3 == 0){
+      Colour powerColour = Colour.getRandomColourForPowerColour();
+      MessageCli.PRINT_POWER_COLOUR.printMessage(powerColour);
+    }
     Colour ownColor = Colour.fromInput(parts[0]);
     Colour guessColour = Colour.fromInput(parts[1]);
     MessageCli.PRINT_INFO_MOVE.printMessage(this.playerName,ownColor, guessColour);
-    
 
 
 
+
+
+
+    currentRound++;
   }
 
 
