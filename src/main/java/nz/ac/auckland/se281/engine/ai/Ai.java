@@ -9,14 +9,18 @@ public abstract class Ai {
   protected Colour ownColour;
   protected Colour guessColour;
   protected GameStrategy gameStrategy;
+  private int score = 0;
 
-  public Colour chooseOwnColour() {
+  public void chooseColour() {
     this.ownColour = gameStrategy.chooseColour();
+    this.guessColour = gameStrategy.chooseColour();
+  }
+
+  public Colour getOwnColour() {
     return ownColour;
   }
 
-  public Colour chooseGuessColour() {
-    this.guessColour = gameStrategy.chooseColour();
+  public Colour getGuessColour() {
     return guessColour;
   }
 
@@ -25,6 +29,6 @@ public abstract class Ai {
   }
 
   public void AiConfirmMessage() {
-    MessageCli.PRINT_INFO_MOVE.printMessage(Game.AI_NAME, chooseOwnColour(), chooseGuessColour());
+    MessageCli.PRINT_INFO_MOVE.printMessage(Game.AI_NAME, ownColour, guessColour);
   }
 }
