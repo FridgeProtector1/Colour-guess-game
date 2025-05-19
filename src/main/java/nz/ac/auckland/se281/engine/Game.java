@@ -10,46 +10,44 @@ import nz.ac.auckland.se281.model.Colour;
 
 public class Game {
   public static String AI_NAME = "HAL-9000";
-  int totalRounds;
-  int currentRound;
-  public String playerName;
-  Ai ai;
-  int playerScore;
-  int aiScore;
+  private String playerName;
+  private Ai ai;
+  private Stats stats;
 
   public Game() {}
 
   public int addScore(
       Colour guessColour, Colour otherPlayersColour, Colour powerColour, boolean isPlayer) {
-    int points = 1;
     if (guessColour != otherPlayersColour) {
       return 0;
     }
+
+    int points = 1;
     if (guessColour == powerColour) {
       points = 3;
     }
 
     if (isPlayer) {
-      playerScore += points;
+      this.stats.setPlayerScore(points);
     } else {
-      aiScore += points;
+      this.stats.setAIScore(points);
     }
     return points;
   }
 
   public void newGame(Difficulty difficulty, int numRounds, String[] options) {
+    this.stats = new Stats();
     this.playerName = options[0];
     MessageCli.WELCOME_PLAYER.printMessage(this.playerName);
-    this.totalRounds = numRounds;
-    this.currentRound = 1;
+    this.stats.setTotalRounds(numRounds);
     this.ai = AiFactory.createAi(difficulty);
   }
 
   public void play() {
-    if (currentRound > totalRounds) {
+    if (stats.getCurrentRound() > stats.getTotalRounds()) {
       MessageCli.PRINT_END_GAME.printMessage();
     }
-    MessageCli.START_ROUND.printMessage(currentRound, totalRounds);
+    MessageCli.START_ROUND.printMessage(stats.getCurrentRound(), stats.getTotalRounds());
 
     MessageCli.ASK_HUMAN_INPUT.printMessage();
     String[] parts = Utils.scanner.nextLine().trim().split("\\s+");
@@ -62,14 +60,14 @@ public class Game {
     }
     boolean isPowerColourRnd = false;
     Colour powerColour = null;
-    if (currentRound % 3 == 0) {
+    if (stats.getCurrentRound() % 3 == 0) {
       isPowerColourRnd = true;
       powerColour = Colour.getRandomColourForPowerColour();
       MessageCli.PRINT_POWER_COLOUR.printMessage(powerColour);
     }
     Colour ownColor = Colour.fromInput(parts[0]);
     Colour guessColour = Colour.fromInput(parts[1]);
-    ai.chooseColour();
+    ai.chooseColours();
     ai.AiConfirmMessage();
     MessageCli.PRINT_INFO_MOVE.printMessage(this.playerName, ownColor, guessColour);
 
@@ -82,7 +80,7 @@ public class Game {
 
     MessageCli.PRINT_OUTCOME_ROUND.printMessage(this.playerName, playerEarnedPoints);
     MessageCli.PRINT_OUTCOME_ROUND.printMessage(Game.AI_NAME, aiEarnedPoints);
-    currentRound++;
+    stats.setCurrentRound();
   }
 
   public void showStats() {}

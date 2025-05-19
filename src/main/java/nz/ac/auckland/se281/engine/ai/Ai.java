@@ -3,15 +3,22 @@ package nz.ac.auckland.se281.engine.ai;
 import nz.ac.auckland.se281.cli.MessageCli;
 import nz.ac.auckland.se281.engine.Game;
 import nz.ac.auckland.se281.engine.ai.gamestrategy.GameStrategy;
+import nz.ac.auckland.se281.engine.ai.gamestrategy.RandomGameStrategy;
 import nz.ac.auckland.se281.model.Colour;
 
 public abstract class Ai {
-  protected Colour ownColour;
-  protected Colour guessColour;
-  protected GameStrategy gameStrategy;
-  private int score = 0;
+  private Colour ownColour;
+  private Colour guessColour;
+  private GameStrategy gameStrategy;
+  private GameStrategy RandomGameStrategy;
 
-  public void chooseColour() {
+  public Ai() {
+    this.RandomGameStrategy = new RandomGameStrategy();
+
+    setStrategy(this.RandomGameStrategy);
+  }
+
+  public void chooseColours() {
     this.ownColour = gameStrategy.chooseColour();
     this.guessColour = gameStrategy.chooseColour();
   }
