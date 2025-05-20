@@ -2,25 +2,36 @@ package nz.ac.auckland.se281.engine.ai;
 
 import nz.ac.auckland.se281.cli.MessageCli;
 import nz.ac.auckland.se281.engine.Game;
+import nz.ac.auckland.se281.engine.Stats;
+import nz.ac.auckland.se281.engine.ai.gamestrategy.AvoidLastGameStrategy;
 import nz.ac.auckland.se281.engine.ai.gamestrategy.GameStrategy;
 import nz.ac.auckland.se281.engine.ai.gamestrategy.RandomGameStrategy;
 import nz.ac.auckland.se281.model.Colour;
 
 public abstract class Ai {
-  private Colour ownColour;
-  private Colour guessColour;
-  private GameStrategy gameStrategy;
-  private GameStrategy RandomGameStrategy;
+  protected Colour ownColour;
+  protected Colour guessColour;
+
+  protected GameStrategy gameStrategy;
+  protected GameStrategy RandomGameStrategy;
+  protected GameStrategy AvoidLastGameStrategy;
+
+  protected Stats stats;
 
   public Ai() {
     this.RandomGameStrategy = new RandomGameStrategy();
-
+    this.AvoidLastGameStrategy = new AvoidLastGameStrategy();
     setStrategy(this.RandomGameStrategy);
   }
 
+  public Ai(Stats stats) {
+    this();
+    this.stats = stats;
+  }
+
   public void chooseColours() {
-    this.ownColour = gameStrategy.chooseColour();
-    this.guessColour = gameStrategy.chooseColour();
+    this.ownColour = gameStrategy.chooseColour(stats);
+    this.guessColour = gameStrategy.chooseColour(stats);
   }
 
   public Colour getOwnColour() {
