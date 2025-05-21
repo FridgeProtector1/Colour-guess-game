@@ -52,7 +52,7 @@ public abstract class Ai {
     this.guessColourStrategy = gameStrategy;
   }
 
-  public void AiConfirmMessage() {
+  public void aiConfirmMessage() {
     MessageCli.PRINT_INFO_MOVE.printMessage(Game.aiName, ownColour, guessColour);
   }
 }

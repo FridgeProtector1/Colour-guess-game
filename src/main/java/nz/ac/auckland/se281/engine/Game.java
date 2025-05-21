@@ -1,8 +1,7 @@
 package nz.ac.auckland.se281.engine;
 
-import nz.ac.auckland.se281.cli.MessageCli;
-
 import nz.ac.auckland.se281.Main.Difficulty;
+import nz.ac.auckland.se281.cli.MessageCli;
 import nz.ac.auckland.se281.cli.Utils;
 import nz.ac.auckland.se281.engine.ai.Ai;
 import nz.ac.auckland.se281.engine.ai.AiFactory;
@@ -14,22 +13,23 @@ public class Game {
   private Ai ai;
   private GameState gameState;
 
-  public Game() {}
-
   public int addScore(
       Colour guessColour, Colour otherPlayersColour, Colour powerColour, boolean isPlayer) {
     int points = 0;
 
+    // Assigns the amount of points that are earned if the guessed colour is correct and additional
+    // points if it is also a power colour
     if (guessColour == otherPlayersColour) {
       points = 1;
       if (guessColour == powerColour) {
         points = 3;
       }
     }
+    // Determines who to distribute the points to.
     if (isPlayer) {
       this.gameState.setPlayerScore(points);
     } else {
-      this.gameState.setAIScore(points);
+      this.gameState.setAiScore(points);
     }
     return points;
   }
@@ -44,6 +44,7 @@ public class Game {
   }
 
   public void play() {
+    // gameSate is only null when newGame() hasn't been called since it is made in newGame()
     if (gameState == null) {
       MessageCli.GAME_NOT_STARTED.printMessage();
       return;
@@ -54,12 +55,15 @@ public class Game {
     MessageCli.ASK_HUMAN_INPUT.printMessage();
     String[] parts = Utils.scanner.nextLine().trim().split("\\s+");
 
+    // continually prompts the user to input valid colours, until they input valid the valid colours
     while (parts.length != 2
         || Colour.fromInput(parts[0]) == null
         || Colour.fromInput(parts[1]) == null) {
       MessageCli.INVALID_HUMAN_INPUT.printMessage();
       parts = Utils.scanner.nextLine().trim().split("\\s+");
     }
+
+    // Determines the power colour for this round, only every 3 rounds.
     Colour powerColour = null;
     if (gameState.getCurrentRound() % 3 == 0) {
       powerColour = Colour.getRandomColourForPowerColour();
@@ -69,33 +73,35 @@ public class Game {
     Colour guessColour = Colour.fromInput(parts[1]);
 
     ai.chooseColours();
-    ai.AiConfirmMessage();
+    ai.aiConfirmMessage();
     gameState.setLastColour(ownColour);
     MessageCli.PRINT_INFO_MOVE.printMessage(this.playerName, ownColour, guessColour);
 
     MessageCli.PRINT_OUTCOME_ROUND.printMessage(
         this.playerName, addScore(guessColour, ai.getOwnColour(), powerColour, true));
     MessageCli.PRINT_OUTCOME_ROUND.printMessage(
-        Game.aiName, addScore(ai.getGuessColour(), ownColour, powerColour, false));
+        aiName, addScore(ai.getGuessColour(), ownColour, powerColour, false));
     gameState.setCurrentRound();
+
     if (gameState.getCurrentRound() > gameState.getTotalRounds()) {
       showStats();
-      return;
     }
   }
 
   public void showStats() {
+    // gameSate is only null when newGame() hasn't been called since it is made in newGame()
     if (gameState == null) {
       MessageCli.GAME_NOT_STARTED.printMessage();
       return;
     }
     MessageCli.PRINT_PLAYER_POINTS.printMessage(playerName, gameState.getPlayerScore());
-    MessageCli.PRINT_PLAYER_POINTS.printMessage(aiName, gameState.getAIScore());
+    MessageCli.PRINT_PLAYER_POINTS.printMessage(aiName, gameState.getAiScore());
     MessageCli.PRINT_END_GAME.printMessage();
 
-    if (gameState.getPlayerScore() > gameState.getAIScore()) {
+    // Determines who won, or if there was a tie
+    if (gameState.getPlayerScore() > gameState.getAiScore()) {
       MessageCli.PRINT_WINNER_GAME.printMessage(playerName);
-    } else if (gameState.getAIScore() > gameState.getPlayerScore()) {
+    } else if (gameState.getAiScore() > gameState.getPlayerScore()) {
       MessageCli.PRINT_WINNER_GAME.printMessage(aiName);
     } else {
       MessageCli.PRINT_TIE_GAME.printMessage();

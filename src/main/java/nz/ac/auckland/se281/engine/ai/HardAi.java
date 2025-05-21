@@ -10,6 +10,7 @@ public class HardAi extends Ai {
 
   @Override
   public void chooseColours() {
+    // Picks colours randomly for the first 2 rounds.
     if (gameState.getCurrentRound() <= 2) {
       super.chooseColours();
 
@@ -23,6 +24,8 @@ public class HardAi extends Ai {
       return;
     }
 
+    // Cycles between least used color strategy and avoid last colour strategy, when the AI guess is
+    // wrong
     if (!gameState.getAiLastGuessResult()) {
       if (this.guessColourStrategy == avoidLastGameStrategy) {
         setStrategy(leastUsedGameStrategy);
