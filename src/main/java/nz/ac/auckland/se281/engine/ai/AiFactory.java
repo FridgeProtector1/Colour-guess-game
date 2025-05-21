@@ -13,7 +13,7 @@ public class AiFactory {
       case MEDIUM:
         return new MediumAi(stats);
       case HARD:
-
+        return new HardAi(stats);
       default:
     }
 

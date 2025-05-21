@@ -5,6 +5,7 @@ import nz.ac.auckland.se281.engine.Game;
 import nz.ac.auckland.se281.engine.Stats;
 import nz.ac.auckland.se281.engine.ai.gamestrategy.AvoidLastGameStrategy;
 import nz.ac.auckland.se281.engine.ai.gamestrategy.GameStrategy;
+import nz.ac.auckland.se281.engine.ai.gamestrategy.LeastUsedGameStrategy;
 import nz.ac.auckland.se281.engine.ai.gamestrategy.RandomGameStrategy;
 import nz.ac.auckland.se281.model.Colour;
 
@@ -13,15 +14,17 @@ public abstract class Ai {
   protected Colour guessColour;
 
   protected GameStrategy gameStrategy;
-  protected GameStrategy RandomGameStrategy;
-  protected GameStrategy AvoidLastGameStrategy;
+  protected GameStrategy randomGameStrategy;
+  protected GameStrategy avoidLastGameStrategy;
+  protected GameStrategy leastUsedGameStrategy;
 
   protected Stats stats;
 
   public Ai() {
-    this.RandomGameStrategy = new RandomGameStrategy();
-    this.AvoidLastGameStrategy = new AvoidLastGameStrategy();
-    setStrategy(this.RandomGameStrategy);
+    this.randomGameStrategy = new RandomGameStrategy();
+    this.avoidLastGameStrategy = new AvoidLastGameStrategy();
+    this.leastUsedGameStrategy = new LeastUsedGameStrategy();
+    setStrategy(this.randomGameStrategy);
   }
 
   public Ai(Stats stats) {

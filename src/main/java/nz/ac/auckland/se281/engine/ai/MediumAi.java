@@ -11,9 +11,9 @@ public class MediumAi extends Ai {
   public void chooseColours() {
 
     if (stats.getCurrentRound() >= 2) {
-      setStrategy(RandomGameStrategy);
+      setStrategy(randomGameStrategy);
       this.ownColour = gameStrategy.chooseColour(stats);
-      setStrategy(AvoidLastGameStrategy);
+      setStrategy(avoidLastGameStrategy);
       this.guessColour = gameStrategy.chooseColour(stats);
     } else {
       super.chooseColours();
