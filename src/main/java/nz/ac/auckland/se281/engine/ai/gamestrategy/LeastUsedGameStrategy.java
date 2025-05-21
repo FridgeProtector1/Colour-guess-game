@@ -1,9 +1,8 @@
 package nz.ac.auckland.se281.engine.ai.gamestrategy;
 
+import java.util.HashMap;
 import nz.ac.auckland.se281.engine.GameState;
 import nz.ac.auckland.se281.model.Colour;
-
-import java.util.HashMap;
 
 public class LeastUsedGameStrategy implements GameStrategy {
   @Override
