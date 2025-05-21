@@ -89,5 +89,16 @@ public class Game {
       MessageCli.GAME_NOT_STARTED.printMessage();
       return;
     }
+    MessageCli.PRINT_PLAYER_POINTS.printMessage(playerName, gameState.getPlayerScore());
+    MessageCli.PRINT_PLAYER_POINTS.printMessage(aiName, gameState.getAIScore());
+    MessageCli.PRINT_END_GAME.printMessage();
+
+    if (gameState.getPlayerScore() > gameState.getAIScore()) {
+      MessageCli.PRINT_WINNER_GAME.printMessage(playerName);
+    } else if (gameState.getAIScore() > gameState.getPlayerScore()) {
+      MessageCli.PRINT_WINNER_GAME.printMessage(aiName);
+    } else {
+      MessageCli.PRINT_TIE_GAME.printMessage();
+    }
   }
 }
