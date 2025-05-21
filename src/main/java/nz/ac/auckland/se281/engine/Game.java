@@ -9,7 +9,7 @@ import nz.ac.auckland.se281.engine.ai.AiFactory;
 import nz.ac.auckland.se281.model.Colour;
 
 public class Game {
-  public static final String AI_NAME = "HAL-9000";
+  public static final String aiName = "HAL-9000";
   private String playerName;
   private Ai ai;
   private GameState gameState;
@@ -44,9 +44,11 @@ public class Game {
   }
 
   public void play() {
-    if (gameState.getCurrentRound() > gameState.getTotalRounds()) {
-      MessageCli.PRINT_END_GAME.printMessage();
+    if (gameState == null) {
+      MessageCli.GAME_NOT_STARTED.printMessage();
+      return;
     }
+
     MessageCli.START_ROUND.printMessage(gameState.getCurrentRound(), gameState.getTotalRounds());
 
     MessageCli.ASK_HUMAN_INPUT.printMessage();
@@ -74,9 +76,18 @@ public class Game {
     MessageCli.PRINT_OUTCOME_ROUND.printMessage(
         this.playerName, addScore(guessColour, ai.getOwnColour(), powerColour, true));
     MessageCli.PRINT_OUTCOME_ROUND.printMessage(
-        Game.AI_NAME, addScore(ai.getGuessColour(), ownColour, powerColour, false));
+        Game.aiName, addScore(ai.getGuessColour(), ownColour, powerColour, false));
     gameState.setCurrentRound();
+    if (gameState.getCurrentRound() > gameState.getTotalRounds()) {
+      showStats();
+      return;
+    }
   }
 
-  public void showStats() {}
+  public void showStats() {
+    if (gameState == null) {
+      MessageCli.GAME_NOT_STARTED.printMessage();
+      return;
+    }
+  }
 }

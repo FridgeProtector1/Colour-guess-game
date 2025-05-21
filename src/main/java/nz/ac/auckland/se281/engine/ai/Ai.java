@@ -53,6 +53,6 @@ public abstract class Ai {
   }
 
   public void AiConfirmMessage() {
-    MessageCli.PRINT_INFO_MOVE.printMessage(Game.AI_NAME, ownColour, guessColour);
+    MessageCli.PRINT_INFO_MOVE.printMessage(Game.aiName, ownColour, guessColour);
   }
 }
