@@ -4,16 +4,20 @@ import nz.ac.auckland.se281.model.Colour;
 
 import java.util.HashMap;
 
-public class Stats {
+public class GameState {
   private int totalRounds;
   private int currentRound = 1;
   private int playerScore = 0;
   private int aiScore = 0;
+  private boolean aiLastGuessResult = false;
   private HashMap<Colour, Integer> colourUsagesMap = new HashMap<>();
 
   private Colour lastColour;
 
   public HashMap<Colour, Integer> getColourUsagesMap() {
+    for (Colour colour : Colour.values()) {
+      colourUsagesMap.putIfAbsent(colour, 0);
+    }
     return colourUsagesMap;
   }
 
@@ -36,11 +40,16 @@ public class Stats {
   }
 
   public void setPlayerScore(int playerScore) {
-    this.playerScore = playerScore;
+    this.playerScore += playerScore;
   }
 
   public void setAIScore(int aiScore) {
-    this.aiScore = aiScore;
+    aiLastGuessResult = aiScore != 0;
+    this.aiScore += aiScore;
+  }
+
+  public boolean getAiLastGuessResult() {
+    return this.aiLastGuessResult;
   }
 
   public int getTotalRounds() {

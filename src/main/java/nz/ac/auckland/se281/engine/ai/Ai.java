@@ -2,7 +2,7 @@ package nz.ac.auckland.se281.engine.ai;
 
 import nz.ac.auckland.se281.cli.MessageCli;
 import nz.ac.auckland.se281.engine.Game;
-import nz.ac.auckland.se281.engine.Stats;
+import nz.ac.auckland.se281.engine.GameState;
 import nz.ac.auckland.se281.engine.ai.gamestrategy.AvoidLastGameStrategy;
 import nz.ac.auckland.se281.engine.ai.gamestrategy.GameStrategy;
 import nz.ac.auckland.se281.engine.ai.gamestrategy.LeastUsedGameStrategy;
@@ -13,28 +13,31 @@ public abstract class Ai {
   protected Colour ownColour;
   protected Colour guessColour;
 
-  protected GameStrategy gameStrategy;
+  protected GameStrategy guessColourStrategy;
+  protected GameStrategy ownColourStrategy;
+
   protected GameStrategy randomGameStrategy;
   protected GameStrategy avoidLastGameStrategy;
   protected GameStrategy leastUsedGameStrategy;
 
-  protected Stats stats;
+  protected GameState gameState;
 
   public Ai() {
     this.randomGameStrategy = new RandomGameStrategy();
     this.avoidLastGameStrategy = new AvoidLastGameStrategy();
     this.leastUsedGameStrategy = new LeastUsedGameStrategy();
+    this.ownColourStrategy = this.randomGameStrategy;
     setStrategy(this.randomGameStrategy);
   }
 
-  public Ai(Stats stats) {
+  public Ai(GameState gameState) {
     this();
-    this.stats = stats;
+    this.gameState = gameState;
   }
 
   public void chooseColours() {
-    this.ownColour = gameStrategy.chooseColour(stats);
-    this.guessColour = gameStrategy.chooseColour(stats);
+    this.ownColour = ownColourStrategy.chooseColour(gameState);
+    this.guessColour = guessColourStrategy.chooseColour(gameState);
   }
 
   public Colour getOwnColour() {
@@ -46,7 +49,7 @@ public abstract class Ai {
   }
 
   public void setStrategy(GameStrategy gameStrategy) {
-    this.gameStrategy = gameStrategy;
+    this.guessColourStrategy = gameStrategy;
   }
 
   public void AiConfirmMessage() {

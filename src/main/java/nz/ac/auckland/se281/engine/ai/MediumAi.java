@@ -1,22 +1,17 @@
 package nz.ac.auckland.se281.engine.ai;
 
-import nz.ac.auckland.se281.engine.Stats;
+import nz.ac.auckland.se281.engine.GameState;
 
 public class MediumAi extends Ai {
-  MediumAi(Stats stats) {
-    super(stats);
+  MediumAi(GameState gameState) {
+    super(gameState);
   }
 
   @Override
   public void chooseColours() {
-
-    if (stats.getCurrentRound() >= 2) {
-      setStrategy(randomGameStrategy);
-      this.ownColour = gameStrategy.chooseColour(stats);
+    if (gameState.getCurrentRound() >= 2) {
       setStrategy(avoidLastGameStrategy);
-      this.guessColour = gameStrategy.chooseColour(stats);
-    } else {
-      super.chooseColours();
     }
+    super.chooseColours();
   }
 }
