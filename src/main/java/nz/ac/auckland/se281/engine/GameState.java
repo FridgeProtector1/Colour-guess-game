@@ -5,7 +5,7 @@ import nz.ac.auckland.se281.model.Colour;
 
 public class GameState {
   private int totalRounds;
-  private int currentRound = 1;
+  private int currentRound = 0;
   private int playerScore = 0;
   private int aiScore = 0;
   private boolean aiLastGuessResult = false;

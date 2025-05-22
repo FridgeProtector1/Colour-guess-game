@@ -45,10 +45,11 @@ public class Game {
 
   public void play() {
     // gameSate is only null when newGame() hasn't been called since it is made in newGame()
-    if (gameState == null) {
+    if (gameState == null || gameState.getCurrentRound() == gameState.getTotalRounds()) {
       MessageCli.GAME_NOT_STARTED.printMessage();
       return;
     }
+    gameState.setCurrentRound();
 
     MessageCli.START_ROUND.printMessage(gameState.getCurrentRound(), gameState.getTotalRounds());
 
@@ -81,10 +82,10 @@ public class Game {
         this.playerName, addScore(guessColour, ai.getOwnColour(), powerColour, true));
     MessageCli.PRINT_OUTCOME_ROUND.printMessage(
         aiName, addScore(ai.getGuessColour(), ownColour, powerColour, false));
-    gameState.setCurrentRound();
 
-    if (gameState.getCurrentRound() > gameState.getTotalRounds()) {
+    if (gameState.getCurrentRound() == gameState.getTotalRounds()) {
       showStats();
+      gameState = null;
     }
   }
 
@@ -96,15 +97,16 @@ public class Game {
     }
     MessageCli.PRINT_PLAYER_POINTS.printMessage(playerName, gameState.getPlayerScore());
     MessageCli.PRINT_PLAYER_POINTS.printMessage(aiName, gameState.getAiScore());
-    MessageCli.PRINT_END_GAME.printMessage();
-
-    // Determines who won, or if there was a tie
-    if (gameState.getPlayerScore() > gameState.getAiScore()) {
-      MessageCli.PRINT_WINNER_GAME.printMessage(playerName);
-    } else if (gameState.getAiScore() > gameState.getPlayerScore()) {
-      MessageCli.PRINT_WINNER_GAME.printMessage(aiName);
-    } else {
-      MessageCli.PRINT_TIE_GAME.printMessage();
+    if (gameState.getCurrentRound() == gameState.getTotalRounds()) {
+      MessageCli.PRINT_END_GAME.printMessage();
+      // Determines who won, or if there was a tie
+      if (gameState.getPlayerScore() > gameState.getAiScore()) {
+        MessageCli.PRINT_WINNER_GAME.printMessage(playerName);
+      } else if (gameState.getAiScore() > gameState.getPlayerScore()) {
+        MessageCli.PRINT_WINNER_GAME.printMessage(aiName);
+      } else {
+        MessageCli.PRINT_TIE_GAME.printMessage();
+      }
     }
   }
 }
